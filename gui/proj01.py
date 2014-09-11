@@ -15,16 +15,15 @@ def VideoPlot():
     canvas1.get_tk_widget().place(x=10, y=10)
 
 def GraphPlot():
-    global gray1, values
+    global gray1, values, meanValue
 
     gray2 = cv2.cvtColor(video.read(0)[1], cv2.COLOR_BGR2GRAY)
 
-
     difference = abs(gray1 - gray2)
-    meanvalue = numpy.mean(difference)
-    print (meanvalue, len(values))
+    meanValue = numpy.mean(difference)
+    print (meanValue, len(values))
     gray1 = gray2
-    values.append(meanvalue)
+    values.append(meanValue)
     values.remove(values[0])
     changeInXAxis = pylab.arange(len(values)-100, len(values), 1)
     plotGraph[0].set_data(changeInXAxis, pylab.array(values[-100:]))
@@ -32,13 +31,26 @@ def GraphPlot():
     canvas2.show()
     canvas2.get_tk_widget().place(x=430, y=10)
 
+
+def TablePlot():
+   # global meanValue
+    tableValues=[['Mean frame', ' ', ' '], [meanValue, '', ''], ['', '', '']]
+    table1 = axis3.table(cellText=tableValues, colWidths=[0.1]*3, loc='center right')
+    table1.set_fontsize(30)
+    table1.scale(3, 2)
+    canvas3.show()
+    canvas3.get_tk_widget().place(x=230, y=350)
+
+
 xAxis = pylab.arange(0, 100, 1)
 yAxis = pylab.array([0]*100)
 
 video = cv2.VideoCapture(0)
 gray1 = cv2.cvtColor(video.read(0)[1], cv2.COLOR_BGR2GRAY)
+
 window = Tk()
-window.geometry('850x450')
+window.geometry('850x7000')
+window.title('Test gui')
 
 values = [0 for x in range(100)]
 
@@ -57,8 +69,17 @@ canvas2.show()
 canvas2.get_tk_widget().place(x=300, y=10)
 axis2.axis([0, 100, 0, 255])
 plotGraph = axis2.plot(xAxis, yAxis, 'o-', color='r', markersize=2)
+meanValue = 0
+
+tableFigure = Figure(figsize=(5, 4), dpi=80)
+axis3 = tableFigure.add_subplot(111)
+axis3.set_title('Data table')
+canvas3 = FigureCanvasTkAgg(tableFigure, master=window)
+canvas3.show()
+canvas3.get_tk_widget().place(x=230, y=350)
 
 timer1 = repeatedTimer(0.1, GraphPlot)
 timer2 = repeatedTimer(0.1, VideoPlot)
+timer3 = repeatedTimer(0.1, TablePlot)
 
 window.mainloop()
