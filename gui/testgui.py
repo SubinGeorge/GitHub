@@ -14,7 +14,7 @@ def Video():
     gray2 = cv2.cvtColor(video.read(0)[1], cv2.COLOR_BGR2GRAY)
     axis1.imshow(frame)
     canvas1.show()
-    canvas1.get_tk_widget().place(x=10, y=10)
+    #canvas1.get_tk_widget().place(x=10, y=10)
 
 
     difference = abs(gray1 - gray2)
@@ -28,7 +28,7 @@ def Video():
     axis2.axis([changeInXAxis.min(), changeInXAxis.max()+1, 0, 255])
     #canvas2 = FigureCanvasTkAgg(graphFigure, master=window)
     canvas2.show()
-    canvas2.get_tk_widget().place(x=500, y=10)
+    #canvas2.get_tk_widget().place(x=500, y=10)
 
 xAxis = pylab.arange(0, 100, 1)
 yAxis = pylab.array([0]*100)
